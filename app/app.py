@@ -10,7 +10,7 @@ model = joblib.load('model.joblib')
 
 @app.route('/')
 def index():
-    return "Welcome to the ML App with Sample Model"
+    return "Welcome to the ML App with Sampl hai"
 
 @app.route('/predict', methods=['GET'])
 def predict():
