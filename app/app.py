@@ -7,7 +7,7 @@ model = joblib.load("model.pkl")
 
 @app.route("/")
 def home():
-    return "ML Model is Live!"
+    return "ML Model is is ha"
 
 @app.route("/predict", methods=["POST"])
 def predict():
