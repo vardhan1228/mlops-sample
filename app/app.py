@@ -13,7 +13,7 @@ except Exception as e:
 
 @app.route("/")
 def index():
-    return "Welcome to the Flask ML App 🎉"
+    return "Welcome to the Flask ML App  veerasir🎉"
 
 @app.route("/predict", methods=["GET"])
 def predict():
@@ -39,5 +39,5 @@ def health():
         return "OK", 200
     return "Model not loaded", 500
 
-if name == "__main__":
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
