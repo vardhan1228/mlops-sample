@@ -1,0 +1,23 @@
+name: Deploy Flask ML App to EC2
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Copy files to EC2
+      run: |
+        scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} -r app ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp
+        scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} scripts/deploy.sh ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp/deploy.sh
+        scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} scripts/health_check.sh ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp/health_check.sh
+
+    - name: SSH and Deploy
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ec2-user@${{ secrets.EC2_HOST }} "bash /home/ec2-user/mlapp/deploy.sh"
