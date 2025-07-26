@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
-jsdjsdbnbdbnsbcs
+
 app = Flask(__name__)
 
 # Load model
