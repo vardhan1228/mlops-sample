@@ -1,4 +1,4 @@
-name: Deploy Flask ML App with Health Check (Single Backup)
+name: Deploy Flask ML App with Health Check (Train model on EC2)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2, Health Check, and Rollback on Failure
+    name: Deploy to EC2, Train Model, Health Check, and Rollback
     runs-on: ubuntu-latest
 
     steps:
@@ -49,6 +49,13 @@ jobs:
           ssh -tt ec2-user@${{ secrets.EC2_HOST }} '
             cd ~/mlapp &&
             pip3 install -r requirements.txt
+          '
+
+      - name: 🧠 Train ML Model on EC2
+        run: |
+          ssh -tt ec2-user@${{ secrets.EC2_HOST }} '
+            cd ~/mlapp &&
+            python3 train_model.py
           '
 
       - name: 🚀 Stop Old Flask App and Start New
