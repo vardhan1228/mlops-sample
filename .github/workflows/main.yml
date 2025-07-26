@@ -59,6 +59,7 @@ jobs:
 
             echo "🚀 Starting Flask app..."
             cd ~/mlapp
+            nohup python3 model.py > output.log 2>&1 < /dev/null & disown
             nohup python3 app.py > output.log 2>&1 < /dev/null & disown
             sleep 5
 
