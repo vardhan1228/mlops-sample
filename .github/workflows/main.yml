@@ -12,12 +12,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Setup SSH key
+      run: |
+        echo "${{ secrets.EC2_SSH_KEY }}" > veera.pem
+        chmod 600 veera.pem
+
     - name: Copy files to EC2
       run: |
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} -r app ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} scripts/deploy.sh ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp/deploy.sh
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} scripts/health_check.sh ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp/health_check.sh
+        scp -o StrictHostKeyChecking=no -i veera.pem -r app ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp
+        scp -o StrictHostKeyChecking=no -i veera.pem scripts/deploy.sh ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp/deploy.sh
+        scp -o StrictHostKeyChecking=no -i veera.pem scripts/health_check.sh ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/mlapp/health_check.sh
 
     - name: SSH and Deploy
       run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ec2-user@${{ secrets.EC2_HOST }} "bash /home/ec2-user/mlapp/deploy.sh"
+        ssh -o StrictHostKeyChecking=no -i veera.pem ec2-user@${{ secrets.EC2_HOST }} "bash /home/ec2-user/mlapp/deploy.sh"
